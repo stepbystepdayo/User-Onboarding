@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 // import Form from "./Form";
 import * as yup from "yup";
-// import axios from "axios";
+import axios from "axios";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -11,7 +11,9 @@ const schema = yup.object().shape({
     .string()
     .required()
     .min(3, "please enter at least 3 char long!"),
-  agree: yup.boolean().oneOf([true]),
+  agree: yup
+    .boolean()
+    .oneOf([true], "You must accept the terms and conditions"),
 });
 
 function App() {
@@ -22,12 +24,39 @@ function App() {
     agree: false,
   });
 
+  const [errors, setErroes] = useState({
+    name: "",
+    email: "",
+    password: "",
+    agree: "",
+  });
+
   // const [disabled, setDisabled] = useState(true);
+
+  const setFormErrors = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(() => setErroes({ ...errors, [name]: "" }))
+      .catch((err) => setErroes({ ...errors, [name]: err.errors[0] }));
+  };
 
   const change = (event) => {
     const { checked, value, name, type } = event.target;
     const valueToUse = type === "chekbox" ? checked : value;
+    setFormErrors(name, valueToUse);
     setForm({ ...form, [name]: valueToUse });
+  };
+
+  const submit = (event) => {
+    event.preventDefault();
+    const newUser = {
+      name: form.name.trim(),
+      email: form.email.trim(),
+      password: form.password.trim(),
+      agree: form.agree,
+    };
+    axios.post(`https://reqres.in/api/users`, newUser);
   };
 
   // useEffect(() => {
@@ -37,7 +66,13 @@ function App() {
 
   return (
     <div className="App">
-      <form>
+      <div style={{ color: "red" }}>
+        <div>{errors.name}</div>
+        <div>{errors.email}</div>
+        <div>{errors.password}</div>
+        <div>{errors.agree}</div>
+      </div>
+      <form onSubmit={submit}>
         <label>
           Name:
           <input onChange={change} value={form.name} name="name" type="text" />
