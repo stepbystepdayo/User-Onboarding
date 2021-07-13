@@ -31,7 +31,11 @@ function App() {
     agree: "",
   });
 
-  // const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(true);
+
+  const [users, setUsers] = useState([]);
+
+  const [post, setPost] = useState([]);
 
   const setFormErrors = (name, value) => {
     yup
@@ -43,7 +47,7 @@ function App() {
 
   const change = (event) => {
     const { checked, value, name, type } = event.target;
-    const valueToUse = type === "chekbox" ? checked : value;
+    const valueToUse = type === "checkbox" ? checked : value;
     setFormErrors(name, valueToUse);
     setForm({ ...form, [name]: valueToUse });
   };
@@ -56,13 +60,34 @@ function App() {
       password: form.password.trim(),
       agree: form.agree,
     };
-    axios.post(`https://reqres.in/api/users`, newUser);
+
+    axios
+      .post(`https://reqres.in/api/users`, newUser)
+      .then((res) => {
+        setUsers([
+          // we want to first put in the original list of users
+          ...users,
+          {
+            name: res.data.name.trim(),
+            email: res.data.email.trim(),
+          },
+        ]);
+        setPost(res.data);
+        setForm({
+          name: "",
+          email: "",
+          password: "",
+          agree: false,
+        });
+        console.log("This is my state! : ", users);
+      })
+      .catch((err) => {});
   };
 
-  // useEffect(() => {
-  //   // console.log(schema);
-  //   schema.isValid(form).then((valid) => setDisabled(valid));
-  // }, [form]);
+  useEffect(() => {
+    // console.log(schema);
+    schema.isValid(form).then((valid) => setDisabled(!valid));
+  }, [form]);
 
   return (
     <div className="App">
@@ -104,8 +129,18 @@ function App() {
             type="checkbox"
           />
         </label>
-        <button>Submit!</button>
+        <button disabled={disabled}>Submit!</button>
       </form>
+
+      <div>
+        {users.map((user) => (
+          <div>
+            <div>{user.name}</div>
+            <div>{user.email}</div>
+          </div>
+        ))}
+        <pre>{JSON.stringify(post, null, 2)}</pre>
+      </div>
     </div>
   );
 }
