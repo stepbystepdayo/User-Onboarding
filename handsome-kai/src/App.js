@@ -91,19 +91,21 @@ function App() {
 
   return (
     <div className="App">
-      <div style={{ color: "red" }}>
+      <div style={{ color: "red" }} className="error">
         <div>{errors.name}</div>
         <div>{errors.email}</div>
         <div>{errors.password}</div>
         <div>{errors.agree}</div>
       </div>
-      <form onSubmit={submit}>
+      <form onSubmit={submit} className="formContainer">
         <label>
-          Name:
+          Name
+          <br />
           <input onChange={change} value={form.name} name="name" type="text" />
         </label>
         <label>
-          Email:
+          Email
+          <br />
           <input
             onChange={change}
             value={form.email}
@@ -112,7 +114,8 @@ function App() {
           />
         </label>
         <label>
-          Password:
+          Password
+          <br />
           <input
             onChange={change}
             value={form.password}
@@ -121,7 +124,7 @@ function App() {
           />
         </label>
         <label>
-          Terms Of Service:
+          Terms Of Service<span> </span>
           <input
             onChange={change}
             checked={form.agree}
@@ -132,14 +135,17 @@ function App() {
         <button disabled={disabled}>Submit!</button>
       </form>
 
-      <div>
+      <div className="boxContainer">
         {users.map((user) => (
           <div>
-            <div>{user.name}</div>
-            <div>{user.email}</div>
+            <div>Name: {user.name}</div>
+            <div>Email: {user.email}</div>
           </div>
         ))}
-        <pre>{JSON.stringify(post, null, 2)}</pre>
+        <pre>
+          This is your data : <br />
+          {JSON.stringify(post, null, 2)}
+        </pre>
       </div>
     </div>
   );
