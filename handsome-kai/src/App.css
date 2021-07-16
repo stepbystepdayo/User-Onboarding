@@ -1,9 +1,11 @@
 .App {
   display: flex;
-
   flex-direction: column;
+  background-color: antiquewhite;
 }
-
+h1 {
+  text-align: center;
+}
 .formContainer {
   display: flex;
   flex-direction: column;
@@ -16,13 +18,13 @@
 }
 
 .error {
-  margin-top: 4%;
+  margin-top: 2%;
   text-align: center;
 }
 
 .boxContainer {
   padding: 4%;
-  margin: 4% auto;
+  margin: 0 auto;
   width: 300px;
   height: 50%;
   border: 1px solid pink;

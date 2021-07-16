@@ -5,12 +5,12 @@ import * as yup from "yup";
 import axios from "axios";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email(),
+  name: yup.string().required("Name is required"),
+  email: yup.string().email("Email is required"),
   password: yup
     .string()
     .required()
-    .min(3, "please enter at least 3 char long!"),
+    .min(6, "please enter at least 6 char long!"),
   agree: yup
     .boolean()
     .oneOf([true], "You must accept the terms and conditions"),
@@ -91,6 +91,9 @@ function App() {
 
   return (
     <div className="App">
+      <div>
+        <h1>Enter your Info! 👾</h1>
+      </div>
       <div style={{ color: "red" }} className="error">
         <div>{errors.name}</div>
         <div>{errors.email}</div>
