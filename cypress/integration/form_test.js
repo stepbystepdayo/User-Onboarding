@@ -85,12 +85,12 @@ describe("My First Task ", () => {
       nameInput().clear();
       cy.contains(/Name is required/i);
     });
-    // it("show red error id email is blank", () => {
-    //   mailInput().should("have.value", "");
-    //   mailInput().type("sl.deve080412@gmail.com");
-    //   mailInput().should("have.value", "sl.deve080412@gmail.com");
-    //   mailInput().clear();
-    //   cy.contains(/Email is required/i);
-    // });
+    it("show red error id email is blank", () => {
+      passwordInput().should("have.value", "");
+      passwordInput().type("doglover");
+      passwordInput().should("have.value", "doglover");
+      passwordInput().clear();
+      cy.contains(/this is a required field/i);
+    });
   });
 });
